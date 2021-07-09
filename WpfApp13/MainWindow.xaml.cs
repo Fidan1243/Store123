@@ -24,12 +24,7 @@ namespace WpfApp13
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private Food food;
-        public Food Info
-        {
-            get { return food; }
-            set { food = value; OnPropertyChanged(); }
-        }
+        int info;
         public ObservableCollection<Food> Foods2 { get; set; } = new ObservableCollection<Food>();
         public ObservableCollection<Food> Foods { get; set; } = new ObservableCollection<Food>
         {
@@ -95,6 +90,7 @@ namespace WpfApp13
             Food fd;
             if (labl1.Text == string.Empty || labl1.Text == null)
             {
+
                 fd = new Food()
                 {
                     ImagePath = "Images/default.jpg",
@@ -130,18 +126,26 @@ namespace WpfApp13
             nem.Foreground = Brushes.Black;
             nem.Text = f.Name;
             pr.Text = f.Price.ToString();
-            Info = f;
+            labl1.Text = f.ImagePath;
+            info = (sender as ListBox).SelectedIndex;
 
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            (listb1.SelectedItem as Food).Name = nem.Text;
-            (listb1.SelectedItem as Food).Price = Convert.ToDouble(pr.Text);
-            if (nm != null)
+            Food fd = new Food()
             {
-                (listb1.SelectedItem as Food).ImagePath = labl1.Text;
-            }
+                ImagePath = labl1.Text,
+                Name = nem.Text,
+                Price = Convert.ToDouble(pr.Text)
+            };
+            Foods[info] = fd;
+            nem.Text = "Name";
+            pr.Text = "Price";
+            nem.Visibility = Visibility.Collapsed;
+            pr.Visibility = Visibility.Collapsed;
+            nm.Source = null;
+            labl1.Text = string.Empty;
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -162,7 +166,7 @@ namespace WpfApp13
         {
             listb2.Visibility = Visibility.Collapsed;
             listb1.Visibility = Visibility.Visible;
-            ;
+            Foods2.Clear();
         }
     }
 }
